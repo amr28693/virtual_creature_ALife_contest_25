@@ -17,7 +17,7 @@ python MORTAL_Mind_py_VISUALIZER.py
 
 # email: a.m.rodriguezscience [at] gmail with questions, collaborations, etc.
 
-
+# for reproduction purposes, the song used in the video can be found at: https://open.spotify.com/track/0WXrEUvhmcR8mjfJWeSNQn?si=d92dfe21ff824d22 , or: https://youtu.be/sjMEG0yF8ig?si=mO-RQw1Us07WfFIm
 
 
 ###### script notes: ######
