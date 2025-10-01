@@ -19,6 +19,8 @@ python MORTAL_Mind_py_VISUALIZER.py
 
 # for reproduction purposes, the song used in the video can be found at: https://open.spotify.com/track/0WXrEUvhmcR8mjfJWeSNQn?si=d92dfe21ff824d22 , or: https://youtu.be/sjMEG0yF8ig?si=mO-RQw1Us07WfFIm
 
+# Reproduction note: The music depicted in the associated youtube video https://www.youtube.com/watch?v=dYxRJlu1SAg contains an inserted audio effect to obscure two profanities. These inserted audio effects were not utilized in the actual runs of creature instantiation, and were simply added to the video soundtrack to remove offensive language... to be frank, I recorded the songs myself and have heard them so many times I straight up forget I used a song with profranity for this.  I selected the song for its length and dynamics...
+
 # Released under MIT License
 
 Copyright (c) 2013 Mark Otto.
