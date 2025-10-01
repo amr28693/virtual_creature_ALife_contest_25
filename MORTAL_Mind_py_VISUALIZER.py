@@ -70,7 +70,7 @@ psi2 *= np.exp(1j * (vx2 * X + vy2 * Y))
 psi = psi1 + psi2
 
 # === Audio input ===
-audio_amplitude = 0.05
+audio_amplitude = 0.85
 def audio_callback(indata, frames, time, status):
     global audio_amplitude
     audio_amplitude = np.abs(indata[:, 0]).mean()
