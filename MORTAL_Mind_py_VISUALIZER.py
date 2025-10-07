@@ -21,9 +21,9 @@ X, Y = np.meshgrid(x, y)
 
 Nt = 4800
 dt = 0.01
-kx = 2 * np.pi * np.fft.fftshift(np.fft.fftfreq(Nx, d=dx))
-ky = 2 * np.pi * np.fft.fftshift(np.fft.fftfreq(Ny, d=dy))
-KX, KY = np.meshgrid(kx, ky)
+kx = 2*np.pi*np.fft.fftfreq(Nx, d=dx)
+ky = 2*np.pi*np.fft.fftfreq(Ny, d=dy)
+KX, KY = np.meshgrid(kx, ky, indexing="xy")
 k2 = KX**2 + KY**2
 L_op = np.exp(-1j * k2 * dt / 2)
 
@@ -70,7 +70,7 @@ psi2 *= np.exp(1j * (vx2 * X + vy2 * Y))
 psi = psi1 + psi2
 
 # === Audio input ===
-audio_amplitude = 0.85
+audio_amplitude = 0.05
 def audio_callback(indata, frames, time, status):
     global audio_amplitude
     audio_amplitude = np.abs(indata[:, 0]).mean()
@@ -124,7 +124,9 @@ for t in range(Nt):
     kinetic = np.sum(np.abs(np.fft.fft2(psi))**2 * k2) * (dx*dy) / (Nx*Ny)**2
     potential = -0.5 * np.sum(amp**4) * dx * dy
     energy_series[t] = kinetic + potential
-    entropy_series[t] = -np.sum(amp**2 * np.log(amp**2 + 1e-12)) * dx * dy
+    I = amp**2
+    p = I / I.sum()                        # probabilities over grid cells
+    entropy_series[t] = -np.sum(p * np.log(p + 1e-12))
 
     phase_series[t] = np.angle(psi)
     amp_series[t] = amp
@@ -137,7 +139,7 @@ for t in range(Nt):
         audio_amplitude += 0.01 * (ord(symbolic_output) % 4 - 1.5)
 
     # --- Mortality check ---
-    if entropy_series[t] > 20.0 or np.sum(np.abs(psi)) < 1e-4:
+    if entropy_series[t] > 11.0 or np.sum(np.abs(psi)) < 1e-4:
         print(f"MIND DEATH at t={t*dt:.2f}")
         break
 
@@ -247,6 +249,16 @@ else:
         row_sums = matrix.sum(axis=1, keepdims=True)
         row_sums[row_sums == 0] = 1
         matrix /= row_sums
+
+    # --- Stationary vs observed distribution ---
+        w, v = np.linalg.eig(matrix.T)
+        pi = np.real(v[:, np.argmin(np.abs(w - 1))]); pi /= pi.sum()
+        obs = np.array([counts[s] for s in symbols], float); obs /= obs.sum()
+
+        print("\nStationary vs observed:")
+        for s, p, o in zip(symbols, pi, obs):
+            print(f"{s}: pi={p:.3f}  obs={o:.3f}")
+
 
         print("\nTransition probability matrix:")
         for i, s in enumerate(symbols):
